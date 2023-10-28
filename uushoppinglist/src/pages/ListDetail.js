@@ -179,9 +179,11 @@ function ShoppingListApp() {
             Become Owner
           </button>
         )}
-        <button className="btn btn-danger ml-2" onClick={leaveList}>
+        {currentUser !== 'Owner' && (
+          <button className="btn btn-danger ml-2" onClick={leaveList}>
           Leave List
-        </button>
+          </button>
+        )}
       </div>
       {currentUser === 'Owner' && (
         <div className="mt-3">
