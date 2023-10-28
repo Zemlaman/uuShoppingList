@@ -1,0 +1,73 @@
+body {
+  background-color: #5AC229 !important;
+}
+
+.list-group-item {
+  padding: 4px 8px !important;
+}
+
+.form-control, #members-list-item {
+  margin-bottom: 2.5px !important;
+  padding: 2.5px 5px !important;
+}
+
+
+.select-food {
+  width: 50%;
+}
+
+.input-quantity {
+  width: 20%;
+}
+
+.btn-danger,
+.btn-warning {
+  background-color: #ff4136;
+}
+
+.btn-success {
+  background-color: #28a745;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+select {
+  width: 100%;
+  padding: 5px;
+}
+
+.list-group-item.list-group-item-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+  text-decoration: line-through;
+}
+
+.list-group-item .btn {
+  margin-left: 10px;
+}
+
+.form-control {
+  width: 5%;
+}
+
+h1 {
+  font-size: 32px;
+  text-align: center;
+}
+
+#members-list-item {
+  font-size: 14px;
+  color: #333;
+}
+
+#members-list-item .btn {
+  margin-left: 10px;
+}
+
+.mt-3,
+.mt-2 {
+  margin-top: 15px;
+}
