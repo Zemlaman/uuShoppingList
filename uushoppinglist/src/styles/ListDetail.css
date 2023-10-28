@@ -4,6 +4,7 @@ body {
   
   .list-group-item {
     padding: 4px 8px !important;
+    justify-content: center !important;
   }
   
   .form-control, #members-list-item {
@@ -48,8 +49,8 @@ body {
     margin-left: 10px;
   }
   
-  .form-control {
-    width: 5%;
+  .form-controlstate {
+    width: 30%;
   }
   
   h1 {
@@ -60,21 +61,38 @@ body {
   #members-list-item {
     font-size: 14px;
     color: #333;
+    width: 50%;
+    padding: 5px;
   }
   
   #members-list-item .btn {
     margin-left: 10px;
   }
   
-  .mt-3,
-  .mt-2 {
-    margin-top: 15px;
-  }
-
   .container {
     border: 2px solid black;
     padding: 20px;
     border-radius: 10px;
+    width: 50% !important;
+    text-align: center; /* Vodorovné vycentrování obsahu */
+    margin: 0 auto; /* Vytvoření vodorovného středu */
+  }
+  
+  .mb-2,
+  .mt-3,
+  .mt-2,
+  .row,
+  .uslist {
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  #members-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
   }
   
   

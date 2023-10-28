@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/ListDetail.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const initialItems = [
   { id: 1, name: 'Apples' },
@@ -37,6 +39,8 @@ function ShoppingListApp() {
   const [members, setMembers] = useState(initialMembers);
   const [currentUser, setCurrentUser] = useState('');
   const [filter, setFilter] = useState('all');
+  const navigate = useNavigate();
+
 
   const addItem = () => {
     if (selectedFood && !items.some((item) => item.name === selectedFood)) {
@@ -93,7 +97,7 @@ function ShoppingListApp() {
   };
 
   const leaveList = () => {
-    setCurrentUser('');
+    navigate('/');
   };
 
   return (
@@ -107,7 +111,8 @@ function ShoppingListApp() {
             value={selectedFood}
             onChange={(e) => setSelectedFood(e.target.value)}
           >
-            <option value="">Select food</option>
+            <label>Item: </label>
+            <option value="">Select item</option>
             {initialItems.map((food, index) => (
               <option key={index} value={food.name}>
                 {food.name}
@@ -134,7 +139,7 @@ function ShoppingListApp() {
       </div>
       <div className="mb-2">
         <label>Filter: </label>
-        <select className="form-control" onChange={(e) => setFilter(e.target.value)}>
+        <select className="form-controlstate" onChange={(e) => setFilter(e.target.value)}>
           <option value="all">All</option>
           <option value="completed">Completed</option>
           <option value="uncompleted">Uncompleted</option>
@@ -182,9 +187,11 @@ function ShoppingListApp() {
         <div className="mt-3">
           <div className="row">
             <div className="col-md-4 col-sm-6">
+              List name:
               <input
                 type="text"
                 className="form-control"
+                placeholder="List Name"
                 value={listName}
                 onChange={(e) => changeListName(e.target.value)}
               />
@@ -195,6 +202,7 @@ function ShoppingListApp() {
               </button>
             </div>
           </div>
+          <div className="uslist">
           <ul className="list-group" id="members-list">
             {members.map((member) => (
               <li key={member.id} className="list-group-item" id="members-list-item">
@@ -205,6 +213,7 @@ function ShoppingListApp() {
               </li>
             ))}
           </ul>
+          </div>
         </div>
       )}
     </div>
