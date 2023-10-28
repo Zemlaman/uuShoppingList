@@ -82,7 +82,7 @@ function ShoppingListApp() {
     setMembers(updatedMembers);
   };
 
-  const becameUser = () => {
+  const becomeUser = () => {
     setCurrentUser('');
   };
 
@@ -164,8 +164,8 @@ function ShoppingListApp() {
       </ul>
       <div className="mt-3">
         {currentUser ? (
-          <button className="btn btn-warning" onClick={becameUser}>
-            Became User
+          <button className="btn btn-warning" onClick={becomeUser}>
+            Become User
           </button>
         ) : (
           <button className="btn btn-success" onClick={() => setCurrentUser('Owner')}>
