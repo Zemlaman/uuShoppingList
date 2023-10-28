@@ -9,15 +9,17 @@ import NoPage from './pages/NoPage';
 
 export default function App() {
   return (
+    <><h1>uuShoppingList</h1>
+    
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="listdetail" element={<ListDetail />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          <Routes>
+              <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="listdetail" element={<ListDetail />} />
+                  <Route path="*" element={<NoPage />} />
+              </Route>
+          </Routes>
+      </BrowserRouter></>
   );
 }
 

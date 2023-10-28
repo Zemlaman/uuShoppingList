@@ -99,6 +99,7 @@ function ShoppingListApp() {
   return (
     <div className="container">
       <h1 className="mt-3">{listName}</h1>
+      <div className='sec1'>
       <div className="row mb-2">
         <div className="col-md-4 col-sm-6">
           <select
@@ -129,6 +130,7 @@ function ShoppingListApp() {
             Add Item
           </button>
         </div>
+      </div>
       </div>
       <div className="mb-2">
         <label>Filter: </label>
