@@ -95,4 +95,10 @@ body {
     margin: 0 auto;
   }
   
+  input[type=checkbox] {
+  transform: scale(2);
+  margin-bottom: 15px;
+  padding: 5px;
+  display: inline-block;
+}
   
