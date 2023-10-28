@@ -1,31 +1,33 @@
 import React, { useState } from 'react';
-import './App.css';
+import '../styles/ListDetail.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
 const initialItems = [
-  'Apples',
-  'Cola',
-  'Bananas',
-  'Spaghetti',
-  'Bread',
-  'Butter',
-  'Milk',
-  'Chilli',
-  'Beef',
-  'Chicken',
-  'Eggs',
-  'Cheese',
-  'Potatoes',
-  'Onions',
-  'Tomatoes',
-  'Preworkout',
-  'Monster',
-  'Beer',
+  { id: 1, name: 'Apples' },
+  { id: 2, name: 'Cola' },
+  { id: 3, name: 'Bananas' },
+  { id: 4, name: 'Spaghetti' },
+  { id: 5, name: 'Bread' },
+  { id: 6, name: 'Butter' },
+  { id: 7, name: 'Milk' },
+  { id: 8, name: 'Chilli' },
+  { id: 9, name: 'Beef' },
+  { id: 10, name: 'Chicken' },
+  { id: 11, name: 'Eggs' },
+  { id: 12, name: 'Cheese' },
+  { id: 13, name: 'Potatoes' },
+  { id: 14, name: 'Onions' },
+  { id: 15, name: 'Tomatoes' },
+  { id: 16, name: 'Preworkout' },
+  { id: 17, name: 'Monster' },
+  { id: 18, name: 'Beer' },
 ];
 
-
-const initialMembers = ['Oliver', 'Jacob', 'Lukas'];
+const initialMembers = [
+  { id: 1, name: 'Oliver' },
+  { id: 2, name: 'Jacob' },
+  { id: 3, name: 'Lukas' },
+];
 
 function ShoppingListApp() {
   const [listName, setListName] = useState('Shopping List');
@@ -37,9 +39,10 @@ function ShoppingListApp() {
   const [filter, setFilter] = useState('all');
 
   const addItem = () => {
-    if (selectedFood && !items.some((item) => item.food === selectedFood)) {
+    if (selectedFood && !items.some((item) => item.name === selectedFood)) {
       const newItem = {
-        food: selectedFood,
+        id: items.length + 1,
+        name: selectedFood,
         quantity: foodQuantity,
         completed: false,
       };
@@ -48,14 +51,14 @@ function ShoppingListApp() {
     }
   };
 
-  const removeItem = (food) => {
-    const updatedItems = items.filter((item) => item.food !== food);
+  const removeItem = (itemId) => {
+    const updatedItems = items.filter((item) => item.id !== itemId);
     setItems(updatedItems);
   };
 
-  const toggleItemCompletion = (food) => {
+  const toggleItemCompletion = (itemId) => {
     const updatedItems = [...items];
-    const itemToUpdate = updatedItems.find((item) => item.food === food);
+    const itemToUpdate = updatedItems.find((item) => item.id === itemId);
     if (itemToUpdate) {
       itemToUpdate.completed = !itemToUpdate.completed;
       setItems(updatedItems);
@@ -66,12 +69,16 @@ function ShoppingListApp() {
     setListName(newName);
   };
 
-  const addMember = (member) => {
-    setMembers([...members, member]);
+  const addMember = (memberName) => {
+    const newMember = {
+      id: members.length + 1,
+      name: memberName,
+    };
+    setMembers([...members, newMember]);
   };
 
-  const removeMember = (member) => {
-    const updatedMembers = members.filter((m) => m !== member);
+  const removeMember = (memberId) => {
+    const updatedMembers = members.filter((m) => m.id !== memberId);
     setMembers(updatedMembers);
   };
 
@@ -87,7 +94,7 @@ function ShoppingListApp() {
 
   const leaveList = () => {
     setCurrentUser('');
-  }
+  };
 
   return (
     <div className="container">
@@ -101,8 +108,8 @@ function ShoppingListApp() {
           >
             <option value="">Select food</option>
             {initialItems.map((food, index) => (
-              <option key={index} value={food}>
-                {food}
+              <option key={index} value={food.name}>
+                {food.name}
               </option>
             ))}
           </select>
@@ -135,20 +142,20 @@ function ShoppingListApp() {
         {items
           .filter(filterItems)
           .map((item, index) => (
-            <li key={index} className={`list-group-item ${item.completed ? 'list-group-item-success' : ''}`}>
+            <li key={item.id} className={`list-group-item ${item.completed ? 'list-group-item-success' : ''}`}>
               <div className="form-check">
                 <input
                   type="checkbox"
                   className="form-check-input"
                   checked={item.completed}
-                  onChange={() => toggleItemCompletion(item.food)}
+                  onChange={() => toggleItemCompletion(item.id)}
                 />
                 <label className="form-check-label">
-                  {item.food} - Quantity: {item.quantity}
+                  {item.name} - Quantity: {item.quantity}
                 </label>
               </div>
               <div className="float-right">
-                <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.food)}>
+                <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.id)}>
                   Remove
                 </button>
               </div>
@@ -187,10 +194,10 @@ function ShoppingListApp() {
             </div>
           </div>
           <ul className="list-group" id="members-list">
-            {members.map((member, index) => (
-              <li key={index} className="list-group-item" id="members-list-item">
-                {member}
-                <button className="btn btn-danger btn-sm" onClick={() => removeMember(member)}>
+            {members.map((member) => (
+              <li key={member.id} className="list-group-item" id="members-list-item">
+                {member.name}
+                <button className="btn btn-danger btn-sm" onClick={() => removeMember(member.id)}>
                   Remove Member
                 </button>
               </li>
@@ -203,4 +210,5 @@ function ShoppingListApp() {
 }
 
 export default ShoppingListApp;
+
 
