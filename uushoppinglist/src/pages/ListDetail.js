@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import '../styles/ListDetail.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 
 const initialItems = [
@@ -31,8 +34,11 @@ const initialMembers = [
   { id: 3, name: 'Lukas' },
 ];
 
-function ShoppingListApp() {
-  const [listName, setListName] = useState('Shopping List');
+
+const ListDetail = ({ lists }) => {
+  const { listName } = useParams();
+  const selectedListName = `List ${listName}`;
+  const [setListName] = useState(selectedListName);
   const [items, setItems] = useState([]);
   const [selectedFood, setSelectedFood] = useState('');
   const [foodQuantity, setFoodQuantity] = useState(1);
@@ -40,7 +46,8 @@ function ShoppingListApp() {
   const [currentUser, setCurrentUser] = useState('');
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
-
+  const [showModal, setShowModal] = useState(false);
+  const [newListName, setNewListName] = useState(listName);
 
   const addItem = () => {
     if (selectedFood && !items.some((item) => item.name === selectedFood)) {
@@ -70,7 +77,7 @@ function ShoppingListApp() {
   };
 
   const changeListName = (newName) => {
-    setListName(newName);
+    setNewListName(newName);
   };
 
   const addMember = (memberName) => {
@@ -100,9 +107,20 @@ function ShoppingListApp() {
     navigate('/');
   };
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const confirmNameChange = () => {
+    if (newListName.trim() !== '') {
+      setListName(newListName);
+      closeModal();
+    }
+  };
+
   return (
     <div className="container">
-      <h1 className="mt-3">{listName}</h1>
+      <h1 className="mt-3">{newListName}</h1>
       <div className='sec1'>
       <div className="row mb-2">
         <div className="col-md-4 col-sm-6">
@@ -188,13 +206,13 @@ function ShoppingListApp() {
       {currentUser === 'Owner' && (
         <div className="mt-3">
           <div className="row">
-            <div className="col-md-4 col-sm-6">
+          <div className="col-md-4 col-sm-6">
               List name:
               <input
                 type="text"
                 className="form-control"
                 placeholder="List Name"
-                value={listName}
+                value={newListName}
                 onChange={(e) => changeListName(e.target.value)}
               />
             </div>
@@ -218,10 +236,28 @@ function ShoppingListApp() {
           </div>
         </div>
       )}
+
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Name Change</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to change the list name to: {newListName}?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={confirmNameChange}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
 
-export default ShoppingListApp;
+export default ListDetail;
+
 
 
