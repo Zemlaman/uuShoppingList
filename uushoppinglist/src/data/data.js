@@ -54,5 +54,25 @@ export const shoppingLists = [
         archived: true,
         ownerId: 2,
       },
+      {
+        id: 6,
+        name: 'New list 1',
+        itemsList: [],
+        members: [
+
+        ],
+        archived: false,
+        ownerId: 1,
+      },
+      {
+        id: 7,
+        name: 'New list 2',
+        itemsList: [],
+        members: [
+
+        ],
+        archived: false,
+        ownerId: 2,
+      },
   ];
   
