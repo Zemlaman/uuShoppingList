@@ -172,13 +172,6 @@ const ListDetail = () => {
           </li>
         ))}
       </ul>
-      <div className="mt-3">
-        {currentUser.id !== selectedListOwner && (
-          <button className="btn btn-danger" onClick={leaveList}>
-            Leave List
-          </button>
-        )}
-      </div>
       {currentUser.id === selectedListOwner && (
         <div className="mt-3">
           <div className="row">
@@ -230,6 +223,25 @@ const ListDetail = () => {
           </div>
         </div>
       )}
+      {currentUser.id !== selectedListOwner && (
+        <><label>Users in the list : </label><div
+          className="uslist">
+          <ul className="list-group" id="members-list">
+            {members.map((member) => (
+              <li key={member.id} className="list-group-item" id="members-list-item">
+                {member.name}
+              </li>
+            ))}
+          </ul>
+        </div></>
+      )}
+            <div className="mt-3">
+        {currentUser.id !== selectedListOwner && (
+          <button className="btn btn-danger" onClick={leaveList}>
+            Leave List
+          </button>
+        )}
+      </div>
     </div>
   );
 };
