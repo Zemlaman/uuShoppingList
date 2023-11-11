@@ -3,13 +3,16 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
 import { shoppingLists } from '../data/data';
+import UserService from '../services/userService';
 
 function Home() {
+  const userService = new UserService();
+  const currentUser = userService.getCurrentUser();
   const [initialLists, setInitialLists] = useState(shoppingLists);
-
   const [showAddModal, setShowAddModal] = useState(false);
   const [newListName, setNewListName] = useState('');
   const [confirmDeleteList, setConfirmDeleteList] = useState(null);
+  const [showActive, setShowActive] = useState(true);
 
   const openAddModal = () => {
     setShowAddModal(true);
@@ -38,7 +41,10 @@ function Home() {
       const newList = {
         id: newId,
         name: newListName,
+        archived: false,
+        ownerId: currentUser.id,
       };
+
       setInitialLists([...initialLists, newList]);
       closeAddModal();
     }
@@ -48,43 +54,70 @@ function Home() {
     setConfirmDeleteList(listId);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (confirmDeleteList !== null) {
-      const updatedLists = initialLists.filter((list) => list.id !== confirmDeleteList);
-      setInitialLists(updatedLists);
-      setConfirmDeleteList(null);
+      const listToDelete = initialLists.find((list) => list.id === confirmDeleteList);
+      console.log('currentUser', currentUser.id);
+      console.log('listToDetele.ownerId', listToDelete.ownerId);
+      if (listToDelete.ownerId === currentUser.id) {
+        const updatedLists = initialLists.filter((list) => list.id !== confirmDeleteList);
+        setInitialLists(updatedLists);
+        setConfirmDeleteList(null);
+      }
     }
   };
+
+  const filteredLists = showActive ? initialLists.filter((list) => !list.archived) : initialLists;
 
   return (
     <div className="container">
       <h1 className="mt-3">Shopping Lists</h1>
 
-      <Button variant="primary" className="mt-2" onClick={openAddModal}>
-        Add List
-      </Button>
+      <div className="mb-2">
+        <Button
+          variant="info"
+          className="mr-2"
+          onClick={() => setShowActive(false)}
+          disabled={!showActive}
+        >
+          Show All
+        </Button>
+        <Button
+          variant="info"
+          onClick={() => setShowActive(true)}
+          disabled={showActive}
+        >
+          Show Active
+        </Button>
+        <Button variant="primary" className="ml-2" onClick={openAddModal}>
+          Add List
+        </Button>
+      </div>
 
       <div className="row">
-        {initialLists.map((list) => (
+        {filteredLists.map((list) => (
           <div key={list.id} className="col-md-3">
-            <div className="card mb-4">
+            <div className={`card mb-4 ${list.archived ? 'bg-warning' : ''}`}>
               <div className="card-body">
                 <h5 className="card-title">{list.name}</h5>
                 <Link to={`/listdetail/${list.id}`} className="btn btn-primary">
                   View List
                 </Link>
-                <Button
-                  variant="danger"
-                  className="ml-2"
-                  onClick={() => openDeleteConfirmation(list.id)}
-                >
-                  Delete List
-                </Button>
+                {list.ownerId === currentUser.id && (
+                  <Button
+                    variant="danger"
+                    className="ml-2"
+                    onClick={() => openDeleteConfirmation(list.id)}
+                  >
+                    Delete List
+                  </Button>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
+
 
       <Modal show={showAddModal} onHide={closeAddModal}>
         <Modal.Header closeButton>

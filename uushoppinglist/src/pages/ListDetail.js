@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ListDetail.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { shoppingLists } from '../data/data';
 import initialItems from '../data/initialItems';
+import UserService from '../services/userService';
 
 const ListDetail = () => {
   const { listId } = useParams();
   const navigate = useNavigate();
   const selectedList = shoppingLists.find((list) => list.id === parseInt(listId, 10));
-
+  const selectedListOwner = selectedList ? selectedList.ownerId : null;
+  const userService = new UserService();
+  const currentUser = userService.getCurrentUser();
   const [listName, setListName] = useState(() => selectedList.name);
   const [selectedFood, setSelectedFood] = useState('');
   const [foodQuantity, setFoodQuantity] = useState(1);
   const [members, setMembers] = useState(() => selectedList.members);
-  const [currentUser, setCurrentUser] = useState('');
   const [filter, setFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);
   const [newListName, setNewListName] = useState(() => selectedList.name);
@@ -63,10 +64,6 @@ const ListDetail = () => {
     }
   };
 
-  const changeListName = (newName) => {
-    setNewListName(newName);
-  };
-
   const addMember = (memberName) => {
     const newMember = {
       id: members.length + 1,
@@ -80,18 +77,12 @@ const ListDetail = () => {
     setMembers(updatedMembers);
   };
 
-  const becomeUser = () => {
-    setCurrentUser('');
-  };
-
-  const filterItems = (item) => {
-    if (filter === 'all') return true;
-    if (filter === 'completed') return item.completed;
-    if (filter === 'uncompleted') return !item.completed;
-  };
-
   const leaveList = () => {
     navigate('/');
+  };
+
+  const openModal = () => {
+    setShowModal(true);
   };
 
   const closeModal = () => {
@@ -105,9 +96,17 @@ const ListDetail = () => {
     }
   };
 
+  const filterItems = (item) => {
+    if (filter === 'all') return true;
+    if (filter === 'completed') return item.completed;
+    if (filter === 'uncompleted') return !item.completed;
+  };
+
   return (
     <div className="container">
-      <h1 className="mt-3">{listName}</h1>
+      <h1 className="mt-3">
+        {listName}
+      </h1>
       <div className="sec1">
         <div className="row mb-2">
           <div className="col-md-4 col-sm-6">
@@ -174,33 +173,42 @@ const ListDetail = () => {
         ))}
       </ul>
       <div className="mt-3">
-        {currentUser ? (
-          <button className="btn btn-warning" onClick={becomeUser}>
-            Become User
-          </button>
-        ) : (
-          <button className="btn btn-success" onClick={() => setCurrentUser('Owner')}>
-            Become Owner
-          </button>
-        )}
-        {currentUser !== 'Owner' && (
-          <button className="btn btn-danger ml-2" onClick={leaveList}>
+        {currentUser.id !== selectedListOwner && (
+          <button className="btn btn-danger" onClick={leaveList}>
             Leave List
           </button>
         )}
       </div>
-      {currentUser === 'Owner' && (
+      {currentUser.id === selectedListOwner && (
         <div className="mt-3">
           <div className="row">
             <div className="col-md-4 col-sm-6">
-              List name:
-              <input
-                type="text"
-                className="form-control"
-                placeholder="List Name"
-                value={newListName}
-                onChange={(e) => changeListName(e.target.value)}
-              />
+              <button className="btn btn-primary btn-block" onClick={openModal}>
+                Change List Name
+              </button>
+              <Modal show={showModal} onHide={closeModal}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Change List Name</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <label>New List Name: </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter new list name"
+                    value={newListName}
+                    onChange={(e) => setNewListName(e.target.value)}
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={closeModal}>
+                    Cancel
+                  </Button>
+                  <Button variant="primary" onClick={confirmNameChange}>
+                    Confirm
+                  </Button>
+                </Modal.Footer>
+              </Modal>
             </div>
             <div className="col-md-2 col-sm-3">
               <button className="btn btn-primary mt-2" onClick={() => addMember('New Member')}>
@@ -222,23 +230,6 @@ const ListDetail = () => {
           </div>
         </div>
       )}
-
-      <Modal show={showModal} onHide={closeModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Name Change</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to change the list name to: {newListName}?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={confirmNameChange}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 };
