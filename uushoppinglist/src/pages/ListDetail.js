@@ -1,53 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/ListDetail.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { shoppingLists } from '../data/data';
+import initialItems from '../data/initialItems';
 
+const ListDetail = () => {
+  const { listId } = useParams();
+  const navigate = useNavigate();
+  const selectedList = shoppingLists.find((list) => list.id === parseInt(listId, 10));
 
-const initialItems = [
-  { id: 1, name: 'Apples' },
-  { id: 2, name: 'Cola' },
-  { id: 3, name: 'Bananas' },
-  { id: 4, name: 'Spaghetti' },
-  { id: 5, name: 'Bread' },
-  { id: 6, name: 'Butter' },
-  { id: 7, name: 'Milk' },
-  { id: 8, name: 'Chilli' },
-  { id: 9, name: 'Beef' },
-  { id: 10, name: 'Chicken' },
-  { id: 11, name: 'Eggs' },
-  { id: 12, name: 'Cheese' },
-  { id: 13, name: 'Potatoes' },
-  { id: 14, name: 'Onions' },
-  { id: 15, name: 'Tomatoes' },
-  { id: 16, name: 'Preworkout' },
-  { id: 17, name: 'Monster' },
-  { id: 18, name: 'Beer' },
-];
-
-const initialMembers = [
-  { id: 1, name: 'Oliver' },
-  { id: 2, name: 'Jacob' },
-  { id: 3, name: 'Lukas' },
-];
-
-
-const ListDetail = ({ lists }) => {
-  const { listName } = useParams();
-  const selectedListName = `List ${listName}`;
-  const [setListName] = useState(selectedListName);
-  const [items, setItems] = useState([]);
+  const [listName, setListName] = useState(() => selectedList.name);
   const [selectedFood, setSelectedFood] = useState('');
   const [foodQuantity, setFoodQuantity] = useState(1);
-  const [members, setMembers] = useState(initialMembers);
+  const [members, setMembers] = useState(() => selectedList.members);
   const [currentUser, setCurrentUser] = useState('');
   const [filter, setFilter] = useState('all');
-  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [newListName, setNewListName] = useState(listName);
+  const [newListName, setNewListName] = useState(() => selectedList.name);
+
+  const initialItemsData = initialItems.map((item, index) => ({ id: index + 1, ...item }));
+  const selectedItemsData = selectedList.itemsList.map((itemId) => {
+    const selectedItem = initialItemsData.find((item) => item.id === itemId);
+    return selectedItem ? { id: itemId, ...selectedItem } : null;
+  }).filter((item) => item !== null);
+
+  const [items, setItems] = useState([...selectedItemsData]);
+
+  useEffect(() => {
+    if (!selectedList) {
+      navigate('/');
+    }
+  }, [selectedList, navigate]);
 
   const addItem = () => {
     if (selectedFood && !items.some((item) => item.name === selectedFood)) {
@@ -120,40 +107,41 @@ const ListDetail = ({ lists }) => {
 
   return (
     <div className="container">
-      <h1 className="mt-3">{newListName}</h1>
-      <div className='sec1'>
-      <div className="row mb-2">
-        <div className="col-md-4 col-sm-6">
-          <select
-            className="form-control select-food"
-            value={selectedFood}
-            onChange={(e) => setSelectedFood(e.target.value)}
-          >
+      <h1 className="mt-3">{listName}</h1>
+      <div className="sec1">
+        <div className="row mb-2">
+          <div className="col-md-4 col-sm-6">
             <label>Item: </label>
-            <option value="">Select item</option>
-            {initialItems.map((food, index) => (
-              <option key={index} value={food.name}>
-                {food.name}
-              </option>
-            ))}
-          </select>
+            <select
+              className="form-control select-food"
+              value={selectedFood}
+              onChange={(e) => setSelectedFood(e.target.value)}
+            >
+              <option value="">Select item</option>
+              {initialItems.map((food, index) => (
+                <option key={index} value={food.name}>
+                  {food.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-2 col-sm-3">
+            <label>Quantity: </label>
+            <input
+              type="number"
+              className="form-control input-quantity"
+              value={foodQuantity}
+              onChange={(e) => setFoodQuantity(parseInt(e.target.value))}
+              min="1"
+              max="99"
+            />
+          </div>
+          <div className="col-md-2 col-sm-3">
+            <button className="btn btn-primary btn-block" onClick={addItem}>
+              Add Item
+            </button>
+          </div>
         </div>
-        <div className="col-md-2 col-sm-3">
-          <input
-            type="number"
-            className="form-control input-quantity"
-            value={foodQuantity}
-            onChange={(e) => setFoodQuantity(parseInt(e.target.value))}
-            min="1"
-            max="99"
-          />
-        </div>
-        <div className="col-md-2 col-sm-3">
-          <button className="btn btn-primary btn-block" onClick={addItem}>
-            Add Item
-          </button>
-        </div>
-      </div>
       </div>
       <div className="mb-2">
         <label>Filter: </label>
@@ -164,28 +152,26 @@ const ListDetail = ({ lists }) => {
         </select>
       </div>
       <ul className="list-group">
-        {items
-          .filter(filterItems)
-          .map((item, index) => (
-            <li key={item.id} className={`list-group-item ${item.completed ? 'list-group-item-success' : ''}`}>
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={item.completed}
-                  onChange={() => toggleItemCompletion(item.id)}
-                />
-                <label className="form-check-label">
-                  {item.name} - Quantity: {item.quantity}
-                </label>
-              </div>
-              <div className="float-right">
-                <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.id)}>
-                  Remove
-                </button>
-              </div>
-            </li>
-          ))}
+        {items.filter(filterItems).map((item) => (
+          <li key={item.id} className={`list-group-item ${item.completed ? 'list-group-item-success' : ''}`}>
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={item.completed}
+                onChange={() => toggleItemCompletion(item.id)}
+              />
+              <label className="form-check-label">
+                {item.name} - Quantity: {item.quantity}
+              </label>
+            </div>
+            <div className="float-right">
+              <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.id)}>
+                Remove
+              </button>
+            </div>
+          </li>
+        ))}
       </ul>
       <div className="mt-3">
         {currentUser ? (
@@ -199,14 +185,14 @@ const ListDetail = ({ lists }) => {
         )}
         {currentUser !== 'Owner' && (
           <button className="btn btn-danger ml-2" onClick={leaveList}>
-          Leave List
+            Leave List
           </button>
         )}
       </div>
       {currentUser === 'Owner' && (
         <div className="mt-3">
           <div className="row">
-          <div className="col-md-4 col-sm-6">
+            <div className="col-md-4 col-sm-6">
               List name:
               <input
                 type="text"
@@ -223,16 +209,16 @@ const ListDetail = ({ lists }) => {
             </div>
           </div>
           <div className="uslist">
-          <ul className="list-group" id="members-list">
-            {members.map((member) => (
-              <li key={member.id} className="list-group-item" id="members-list-item">
-                {member.name}
-                <button className="btn btn-danger btn-sm" onClick={() => removeMember(member.id)}>
-                  Remove Member
-                </button>
-              </li>
-            ))}
-          </ul>
+            <ul className="list-group" id="members-list">
+              {members.map((member) => (
+                <li key={member.id} className="list-group-item" id="members-list-item">
+                  {member.name}
+                  <button className="btn btn-danger btn-sm" onClick={() => removeMember(member.id)}>
+                    Remove Member
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}
@@ -255,9 +241,6 @@ const ListDetail = ({ lists }) => {
       </Modal>
     </div>
   );
-}
+};
 
 export default ListDetail;
-
-
-

@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
-
+import { shoppingLists } from '../data/data';
 
 function Home() {
-  const [lists, setLists] = useState([
-    { id: 1, name: '10.4.98' },
-    { id: 2, name: 'Party' },
-    { id: 3, name: 'Weekend' },
-    { id: 4, name: 'Christmas' },
-  ]);
+  const [initialLists, setInitialLists] = useState(shoppingLists);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [newListName, setNewListName] = useState('');
@@ -25,13 +20,26 @@ function Home() {
     setNewListName('');
   };
 
+  const generateRandomId = () => {
+    return Math.floor(Math.random() * 10000);
+  };
+
+  const isIdUnique = (id) => {
+    return !initialLists.some((list) => list.id === id);
+  };
+
   const createNewList = () => {
     if (newListName.trim() !== '') {
+      let newId;
+      do {
+        newId = generateRandomId();
+      } while (!isIdUnique(newId));
+
       const newList = {
-        id: lists.length + 1,
+        id: newId,
         name: newListName,
       };
-      setLists([...lists, newList]);
+      setInitialLists([...initialLists, newList]);
       closeAddModal();
     }
   };
@@ -42,8 +50,8 @@ function Home() {
 
   const confirmDelete = () => {
     if (confirmDeleteList !== null) {
-      const updatedLists = lists.filter((list) => list.id !== confirmDeleteList);
-      setLists(updatedLists);
+      const updatedLists = initialLists.filter((list) => list.id !== confirmDeleteList);
+      setInitialLists(updatedLists);
       setConfirmDeleteList(null);
     }
   };
@@ -57,12 +65,12 @@ function Home() {
       </Button>
 
       <div className="row">
-        {lists.map((list) => (
+        {initialLists.map((list) => (
           <div key={list.id} className="col-md-3">
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">{list.name}</h5>
-                <Link to={`/listdetail/${list.id}/${list.name}`} className="btn btn-primary">
+                <Link to={`/listdetail/${list.id}`} className="btn btn-primary">
                   View List
                 </Link>
                 <Button
