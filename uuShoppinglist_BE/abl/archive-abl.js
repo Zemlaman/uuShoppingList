@@ -12,13 +12,13 @@ function ArchiveAbl(req, res) {
     const shoppingList = dao.get(id);
 
     if (shoppingList) {
-      if (!shoppingList.isArchived) {
-        dao.update(id, { isArchived: true });
+      if (!shoppingList.archived) {
+        dao.update(id, { archived: true });
         const successMessage = `Shopping list "${shoppingList.name}" has been successfully archived.`;
         res.json({
           success: true,
           message: successMessage,
-          shoppingList: { ...shoppingList, isArchived: true },
+          shoppingList: { ...shoppingList, archived: true },
         });
       } else {
         res.status(400).json({ error: "Shopping list is already archived." });
