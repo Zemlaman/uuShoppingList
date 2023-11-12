@@ -1,4 +1,4 @@
-const ShoppingListController = require("./controllers/shoppingList");
+const ShoppingListController = require("./api/shoppingList");
 const GetAllShoppingListsAbl = require("./abl//list-all-abl");
 var express = require("express");
 var app = express();
