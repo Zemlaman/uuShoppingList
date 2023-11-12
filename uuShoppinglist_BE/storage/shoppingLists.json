@@ -1,1 +1,1 @@
-[{"id":"1","name":"My shopping list","itemsList":[1, 2, 3, 4, 5],"members":["1", "2"],"archived":false,"ownerId":"1"},{"id": "2", "name":"Party","items":[],"members":[],"archived":false,"ownerId":"2"}]
+[{"id":"1","name":"My shopping list","items":[],"members":["1", "2"],"archived":false,"ownerId":"1"},{"id": "2", "name":"Party","items":[],"members":[],"archived":false,"ownerId":"2"}]
