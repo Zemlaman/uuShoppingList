@@ -235,7 +235,7 @@ const ListDetail = () => {
           </ul>
         </div></>
       )}
-            <div className="mt-3">
+      <div className="mt-3">
         {currentUser.id !== selectedListOwner && (
           <button className="btn btn-danger" onClick={leaveList}>
             Leave List
