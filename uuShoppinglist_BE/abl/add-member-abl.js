@@ -28,7 +28,6 @@ function AddMemberAbl(req, res) {
       return res.status(404).json({ error: "ShoppingList not found." });
     }
 
-    // Check if the member is already in the list
     if (shoppingList.members.includes(member)) {
       return res.status(400).json({ error: "Member already exists." });
     }

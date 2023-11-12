@@ -18,7 +18,7 @@ function UpdateAbl(req, res) {
     owner: body.owner,
     members: body.members || [],
     items: body.items || [],
-    isArchived: body.isArchived || false,
+    archived: body.archived || false,
   };
 
   const shoppingList = dao.get(id);

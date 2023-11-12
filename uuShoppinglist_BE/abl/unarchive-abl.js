@@ -12,13 +12,13 @@ function UnarchiveAbl(req, res) {
     const shoppingList = dao.get(id);
 
     if (shoppingList) {
-      if (shoppingList.isArchived) {
-        dao.update(id, { isArchived: false });
+      if (shoppingList.archived) {
+        dao.update(id, { archived: false });
         const successMessage = `Shopping list "${shoppingList.name}" has been successfully unarchived.`;
         res.json({
           success: true,
           message: successMessage,
-          shoppingList: { ...shoppingList, isArchived: false },
+          shoppingList: { ...shoppingList, archived: false },
         });
       } else {
         res.status(400).json({ error: "Shopping list is not archived." });

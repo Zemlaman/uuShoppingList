@@ -26,7 +26,7 @@ function CreateAbl(req, res) {
     owner: body.owner,
     members: [],
     items: [],
-    isArchived: false
+    archived: false
   };
 
   const shoppingLists = dao._listAll();
