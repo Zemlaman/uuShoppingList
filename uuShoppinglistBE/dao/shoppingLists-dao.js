@@ -15,6 +15,10 @@ class ListsDataAccessObject {
         this.filePath = filePath || DEFAULT_FILE_PATH;
     }
 
+    getListFilePath() {
+        return this.filePath;
+    }
+
     getList(listId) {
         return this.getAllLists().find((list) => list.id === listId);
     }
@@ -50,10 +54,6 @@ class ListsDataAccessObject {
     deleteList(listId) {
         let allLists = this.getAllLists().filter((list) => list.id !== listId);
         fs.writeFileSync(this.getListFilePath(), JSON.stringify(allLists));
-    }
-
-    getListFilePath() {
-        return this.filePath;
     }
 }
 
