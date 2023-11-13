@@ -1,6 +1,6 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
 
-let ShoppingListDao = new ShoppingListDao();
+let SLDao = new ShoppingListDao();
 
 async function ItemDoneAbl(req, res) {
   const listId = req.params.listId;
@@ -11,7 +11,7 @@ async function ItemDoneAbl(req, res) {
       const item = shoppingList.items.find(item => item.id === itemId);
       if (item) {
         item.isCompleted = true;
-        await ShoppingListDao.updateList(listId, shoppingList);
+        await SLDao.updateList(listId, shoppingList);
         res.json({ success: true, message: "Item set as done." });
       } else {
         res.status(404).json({ error: "Item not found." });

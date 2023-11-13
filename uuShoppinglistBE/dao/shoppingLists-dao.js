@@ -10,11 +10,6 @@ const DEFAULT_FILE_PATH = path.join(
     "shoppingLists.json"
 );
 
-"use strict";
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
-
 class ListsDataAccessObject {
     constructor(filePath) {
         this.filePath = filePath || DEFAULT_FILE_PATH;

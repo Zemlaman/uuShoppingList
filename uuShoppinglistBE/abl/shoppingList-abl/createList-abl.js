@@ -7,7 +7,7 @@ const path = require("path");
 app.use(parseBody.json());
 app.use(parseBody.urlencoded({ extended: true }));
 
-let shoppingListDao = new ShoppingListDao(
+let SLDao = new ShoppingListDao(
   path.join(__dirname, "..", "..", "storage", "shoppingLists.json")
 );
 
@@ -28,7 +28,7 @@ function CreateListAbl(req, res) {
     archived: false
   };
 
-  const allLists = shoppingListDao.getAllLists();
+  const allLists = SLDao.getAllLists();
   const alreadyExists = allLists.find(
     (list) =>
       list.name === newList.name

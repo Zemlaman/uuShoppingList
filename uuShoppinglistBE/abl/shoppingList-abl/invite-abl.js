@@ -1,12 +1,12 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
 
-let ShoppingListDao = new ShoppingListDao();
+let SLDao = new ShoppingListDao();
 
 async function InviteAbl(req, res) {
   const id = req.params.id;
   const newListUser = req.body.member;
   try {
-    const shoppingList = await ShoppingListDao.getList(id);
+    const shoppingList = await SLDao.getList(id);
     if (shoppingList) {
       shoppingList.members.push(newListUser);
       await ShoppingListDao.updateList(id, shoppingList);

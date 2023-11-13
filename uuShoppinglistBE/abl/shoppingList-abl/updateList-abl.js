@@ -4,7 +4,7 @@ const app = express();
 const ShoppingListDao = require("../../dao//shoppingLists-dao");
 const path = require("path");
 
-let dao = new ShoppingListDao(
+let SLDao = new ShoppingListDao(
   path.join(__dirname, "..", "storage", "shoppingLists.json")
 );
 
@@ -21,7 +21,7 @@ function UpdateListAbl(req, res) {
     archived: body.archived || false,
   };
 
-  const shoppingList = dao.getListById(id);
+  const shoppingList = SLDao.getListById(id);
 
   if (shoppingList) {
     dao.modifyList(id, updatedFields);

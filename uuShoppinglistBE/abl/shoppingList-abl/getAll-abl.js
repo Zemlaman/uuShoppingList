@@ -1,12 +1,12 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
 const path = require("path");
 
-let ShoppingListDao = new ShoppingListDao(
+let SLDao = new ShoppingListDao(
   path.join(__dirname, "..", "..", "storage", "shoppingLists.json")
 );
 
 function GetAllAbl(req, res) {
-  const shoppingList = ShoppingListDao.getList();
+  const shoppingList = SLDao.getList();
 
 
   res.json(shoppingList);
