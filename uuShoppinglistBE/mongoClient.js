@@ -10,7 +10,7 @@ async function connect() {
     try {
       await client.connect();
       console.log("Connected successfully to MongoDB");
-      return client.db('myNewDatabase');
+      return client.db('ShoppingList');
     } catch (e) {
       console.error("Connection to MongoDB failed", e);
       process.exit(1);
