@@ -1,34 +1,20 @@
-const express = require("express");
-const app = express();
+const ShoppingListDao = require("../../dao/shoppingLists-dao");
 
-const ShoppingListDao = require("../../dao//shoppingLists-dao");
-const path = require("path");
-
-let SLDao = new ShoppingListDao(
-  path.join(__dirname, "..", "storage", "shoppingLists.json")
-);
-
-function UpdateListAbl(req, res) {
+async function UpdateListAbl(req, res) {
+  let SLDao = new ShoppingListDao();
   const id = req.params.id;
+  const updatedData = req.body;
 
-  let body = req.body;
-
-  let updatedFields = {
-    name: body.name,
-    ownerId: body.ownerId,
-    members: [],
-    items: [],
-    archived: body.archived || false,
-  };
-
-  const shoppingList = SLDao.getListById(id);
-
-  if (shoppingList) {
-    dao.modifyList(id, updatedFields);
-    const successMessage = "Shopping list updated!";
-    res.json({ success: true, message: successMessage, shoppingList: updatedFields });
-  } else {
-    res.status(400).json({ error: "Shopping list does not exist" });
+  try {
+    const shoppingList = await SLDao.getList(id);
+    if (shoppingList) {
+      await SLDao.updateList(id, updatedData);
+      res.json({ success: true, message: "Shopping list updated!", shoppingList: updatedData });
+    } else {
+      res.status(404).json({ error: "Shopping list does not exist" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
