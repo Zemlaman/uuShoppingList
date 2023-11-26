@@ -1,59 +1,37 @@
-"use strict";
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
-
-const DEFAULT_FILE_PATH = path.join(
-    __dirname,
-    "server",
-    "storage",
-    "shoppingLists.json"
-);
+const { ObjectId } = require('mongodb');
+const { connect } = require('../mongoClient');
 
 class ListsDataAccessObject {
-    constructor(filePath) {
-        this.filePath = filePath || DEFAULT_FILE_PATH;
+    async getCollection() {
+        const db = await connect();
+        return db.collection('lists');
     }
 
-    getListFilePath() {
-        return this.filePath;
+    async getList(listId) {
+        const collection = await this.getCollection();
+        return collection.findOne({ _id: new ObjectId(listId) });
     }
 
-    getList(listId) {
-        return this.getAllLists().find((list) => list.id === listId);
+    async getAllLists() {
+        const collection = await this.getCollection();
+        return collection.find({}).toArray();
     }
 
-    getAllLists() {
-        try {
-            const fileContents = fs.readFileSync(this.getListFilePath());
-            return fileContents ? JSON.parse(fileContents) : [];
-        } catch (error) {
-            return [];
-        }
+    async createNewList(list) {
+        const collection = await this.getCollection();
+        const result = await collection.insertOne(list);
+        return result.ops[0];
     }
 
-    createNewList(list) {
-        let allLists = this.getAllLists();
-        list.id = crypto.randomBytes(8).toString("hex");
-        allLists.push(list);
-        fs.writeFileSync(this.getListFilePath(), JSON.stringify(allLists));
-        return list;
+    async updateList(id, updatedData) {
+        const collection = await this.getCollection();
+        await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
+        return this.getList(id);
     }
 
-    updateList(id, updatedData) {
-        let allLists = this.getAllLists();
-        const listIndex = allLists.findIndex((list) => list.id === id);
-        if (listIndex !== -1) {
-            allLists[listIndex] = { ...allLists[listIndex], ...updatedData };
-            fs.writeFileSync(this.getListFilePath(), JSON.stringify(allLists));
-            return allLists[listIndex];
-        }
-        return null;
-    }
-
-    deleteList(listId) {
-        let allLists = this.getAllLists().filter((list) => list.id !== listId);
-        fs.writeFileSync(this.getListFilePath(), JSON.stringify(allLists));
+    async deleteList(listId) {
+        const collection = await this.getCollection();
+        await collection.deleteOne({ _id: new ObjectId(listId) });
     }
 }
 

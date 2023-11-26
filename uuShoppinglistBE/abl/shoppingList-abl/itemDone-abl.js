@@ -1,16 +1,16 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
 
-let SLDao = new ShoppingListDao();
-
 async function ItemDoneAbl(req, res) {
+  let SLDao = new ShoppingListDao();
   const listId = req.params.listId;
   const itemId = req.params.itemId;
+
   try {
-    const shoppingList = await dao.getList(listId);
+    const shoppingList = await SLDao.getList(listId);
     if (shoppingList) {
-      const item = shoppingList.items.find(item => item.id === itemId);
-      if (item) {
-        item.isCompleted = true;
+      const itemIndex = shoppingList.items.findIndex(item => item.id === itemId);
+      if (itemIndex !== -1) {
+        shoppingList.items[itemIndex].isCompleted = true;
         await SLDao.updateList(listId, shoppingList);
         res.json({ success: true, message: "Item set as done." });
       } else {

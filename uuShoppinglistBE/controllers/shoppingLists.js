@@ -1,7 +1,9 @@
 var express = require("express");
 var router = express.Router();
+
+// Import ABL skriptů
 const CreateList = require("../abl/shoppingList-abl/createList-abl");
-const GetLIst = require("../abl/shoppingList-abl/getList-abl");
+const GetList = require("../abl/shoppingList-abl/getList-abl");
 const GetAllLists = require("../abl/shoppingList-abl/getAll-abl");
 const DeleteList = require("../abl/shoppingList-abl/deleteList-abl");
 const UpdateList = require("../abl/shoppingList-abl/updateList-abl");
@@ -10,67 +12,49 @@ const Invite = require("../abl/shoppingList-abl/invite-abl");
 const ItemDone = require("../abl/shoppingList-abl/itemDone-abl");
 const RemoveItem = require("../abl/shoppingList-abl/removeItem-abl");
 
-//create a list
+// Vytvoření seznamu
 router.post("/create", function (req, res) {
-    res.setHeader("Content-Type", "application/json");
     CreateList(req, res);
 });
 
-//get list by id
+// Získání seznamu podle ID
 router.get("/get/:id", function (req, res) {
-    res.setHeader("Content-Type", "application/json");
-    GetLIst(req, res);
+    GetList(req, res);
 });
 
-// returns all lists
+// Získání všech seznamů
 router.get("/list", function (req, res) {
-    res.setHeader("Content-Type", "application/json");
     GetAllLists(req, res);
 });
 
-//delete a certain shopping list by its ID
-router.delete("/delete/:id", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// Smazání seznamu podle ID
+router.delete("/delete/:id", function (req, res) {
     DeleteList(req, res);
 });
 
-//delete shopping list 
-router.delete("/delete/:id", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    DeleteAbl(req, res);
-});
-
-//update shopping list
-router.put("/update/:id", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// Aktualizace seznamu
+router.put("/update/:id", function (req, res) {
     UpdateList(req, res);
 });
 
-// archive shopping list
-router.put("/archive/:id", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// Archivace seznamu
+router.put("/archive/:id", function (req, res) {
     ArchiveList(req, res);
 });
 
-// invite a user
-router.post("/invite/:id", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// Pozvání uživatele
+router.post("/invite/:id", function (req, res) {
     Invite(req, res);
 });
 
-// mark item as done
-router.put("/itemDone/:listId/:itemId", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// Označení položky jako dokončené
+router.put("/itemDone/:listId/:itemId", function (req, res) {
     ItemDone(req, res);
 });
 
-// delete an item 
-router.delete("/itemDelete/:listId/:itemId", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// Odstranění položky
+router.delete("/itemDelete/:listId/:itemId", function (req, res) {
     RemoveItem(req, res);
 });
 
 module.exports = router;
-
-
-

@@ -1,15 +1,14 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
-const path = require("path");
 
-let SLDao = new ShoppingListDao(
-  path.join(__dirname, "..", "..", "storage", "shoppingLists.json")
-);
+async function GetAllAbl(req, res) {
+  let SLDao = new ShoppingListDao();
 
-function GetAllAbl(req, res) {
-  const shoppingList = SLDao.getList();
-
-
-  res.json(shoppingList);
+  try {
+    const shoppingLists = await SLDao.getAllLists();
+    res.json(shoppingLists);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 module.exports = GetAllAbl;

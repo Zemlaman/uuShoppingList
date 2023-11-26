@@ -4,16 +4,20 @@ let SLDao = new ShoppingListDao(
   path.join(__dirname, "..", "..", "storage", "shoppingLists.json")
 );
 
-function DeleteListAbl(req, res) {
-  const shoppingList = SLDao.getList(req.params.id);
-
-  const listToDelete = { ...shoppingList, ...req.params };
-  if (shoppingList) {
-    SLDao.removeList(shoppingList);
-  } else {
-    res.status(400).json({ error: "error" });
+async function DeleteListAbl(req, res) {
+  const listId = req.params.id;
+  
+  try {
+    const shoppingList = await SLDao.getList(listId);
+    if (shoppingList) {
+      await SLDao.deleteList(listId);
+      res.json({ success: true, message: `List ${listId} was successfully deleted.` });
+    } else {
+      res.status(404).json({ error: "Shopping list not found." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  res.json(`Delete was succesfull!`);
 }
+
 module.exports = DeleteListAbl;

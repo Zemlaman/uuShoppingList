@@ -1,15 +1,15 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
 
-let SLDao = new ShoppingListDao();
-
 async function ArchiveListAbl(req, res) {
+  let SLDao = new ShoppingListDao();
   const id = req.params.id;
+
   try {
     const shoppingList = await SLDao.getList(id);
     if (shoppingList) {
-      SLDao.archived = true;
-      await SLDao.getList(id, shoppingList);
-      res.json({ success: true, message: "Shopping list is succesfully archived." });
+      const updatedData = { ...shoppingList, archived: true };
+      await SLDao.updateList(id, updatedData);
+      res.json({ success: true, message: "Shopping list is successfully archived." });
     } else {
       res.status(404).json({ error: "Shopping list not found." });
     }
