@@ -1,7 +1,28 @@
 body {
-    background-color: #5AC229 !important;
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
   }
-  
+  :root {
+    /* Světlý režim */
+    --background-color: #5AC229 !important;
+    --text-color: #000000 !important;
+    --border-color: #000000 !important;
+    --border-color-hover: #000000 !important;
+    --navbar-bg-color: #5AC229 !important;
+    --navbar-text-color: #000000 !important;
+    /* ... další barvy ... */
+  }
+  .dark-mode {
+    /* Tmavý režim */
+    --background-color: #000000 !important;
+    --text-color: #5AC229 !important;
+    --border-color: #5AC229 !important;
+    --border-color-hover: #5AC229 !important;
+    --navbar-bg-color: #000000 !important;
+    --navbar-text-color: #5AC229 !important;
+    /* ... další barvy ... */
+  }
+
   .list-group-item {
     padding: 4px 8px !important;
     justify-content: center !important;
@@ -70,7 +91,7 @@ body {
   }
   
   .container {
-    border: 2px solid black;
+    border: 2px solid var(--border-color) !important;
     padding: 20px;
     border-radius: 10px;
     width: 50% !important;
@@ -102,3 +123,11 @@ body {
   display: inline-block;
 }
   
+.navbar {
+  background-color: var(--navbar-bg-color) !important;
+  color: var(--navbar-text-color) !important;
+}
+
+.navbar-brand, .nav-link, .user {
+  color: var(--navbar-text-color) !important;
+}
