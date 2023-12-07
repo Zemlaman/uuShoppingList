@@ -36,7 +36,8 @@
       "addMember": "Přidat člena",
       "leaveList": "Opustit seznam",
       "usersInList": "Uživatelé v seznamu",
-      "selectItem": "Vybrat položku"
+      "selectItem": "Vybrat položku",
+      "removeMember": "Odebrat člena"
     }
   }
   

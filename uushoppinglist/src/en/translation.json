@@ -36,7 +36,8 @@
       "addMember": "Add Member",
       "leaveList": "Leave List",
       "usersInList": "Users in the list",
-      "selectItem": "Select item"
+      "selectItem": "Select item",
+      "removeMember": "Remove Member"
     }
   }
   
