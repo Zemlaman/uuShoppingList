@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
 import { shoppingLists } from '../data/data';
 import UserService from '../services/userService';
+import { useTranslation } from 'react-i18next';
 
 function Home() {
   const userService = new UserService();
@@ -13,23 +14,16 @@ function Home() {
   const [newListName, setNewListName] = useState('');
   const [confirmDeleteList, setConfirmDeleteList] = useState(null);
   const [showActive, setShowActive] = useState(true);
+  const { t } = useTranslation();
 
-  const openAddModal = () => {
-    setShowAddModal(true);
-  };
-
+  const openAddModal = () => setShowAddModal(true);
   const closeAddModal = () => {
     setShowAddModal(false);
     setNewListName('');
   };
 
-  const generateRandomId = () => {
-    return Math.floor(Math.random() * 10000);
-  };
-
-  const isIdUnique = (id) => {
-    return !initialLists.some((list) => list.id === id);
-  };
+  const generateRandomId = () => Math.floor(Math.random() * 10000);
+  const isIdUnique = (id) => !initialLists.some((list) => list.id === id);
 
   const createNewList = () => {
     if (newListName.trim() !== '') {
@@ -50,20 +44,12 @@ function Home() {
     }
   };
 
-  const openDeleteConfirmation = (listId) => {
-    setConfirmDeleteList(listId);
-  };
-
-  const confirmDelete = async () => {
+  const openDeleteConfirmation = (listId) => setConfirmDeleteList(listId);
+  const confirmDelete = () => {
     if (confirmDeleteList !== null) {
-      const listToDelete = initialLists.find((list) => list.id === confirmDeleteList);
-      console.log('currentUser', currentUser.id);
-      console.log('listToDetele.ownerId', listToDelete.ownerId);
-      if (listToDelete.ownerId === currentUser.id) {
-        const updatedLists = initialLists.filter((list) => list.id !== confirmDeleteList);
-        setInitialLists(updatedLists);
-        setConfirmDeleteList(null);
-      }
+      const updatedLists = initialLists.filter((list) => list.id !== confirmDeleteList);
+      setInitialLists(updatedLists);
+      setConfirmDeleteList(null);
     }
   };
 
@@ -71,7 +57,7 @@ function Home() {
 
   return (
     <div className="container">
-      <h1 className="mt-3">Shopping Lists</h1>
+      <h1 className="mt-3">{t('home.shoppingLists')}</h1>
 
       <div className="mb-2">
         <Button
@@ -80,17 +66,17 @@ function Home() {
           onClick={() => setShowActive(false)}
           disabled={!showActive}
         >
-          Show All
+          {t('home.showAll')}
         </Button>
         <Button
           variant="info"
           onClick={() => setShowActive(true)}
           disabled={showActive}
         >
-          Show Active
+          {t('home.showActive')}
         </Button>
         <Button variant="primary" className="ml-2" onClick={openAddModal}>
-          Add List
+          {t('home.addList')}
         </Button>
       </div>
 
@@ -101,7 +87,7 @@ function Home() {
               <div className="card-body">
                 <h5 className="card-title">{list.name}</h5>
                 <Link to={`/listdetail/${list.id}`} className="btn btn-primary">
-                  View List
+                  {t('home.viewList')}
                 </Link>
                 {list.ownerId === currentUser.id && (
                   <Button
@@ -109,7 +95,7 @@ function Home() {
                     className="ml-2"
                     onClick={() => openDeleteConfirmation(list.id)}
                   >
-                    Delete List
+                    {t('home.deleteList')}
                   </Button>
                 )}
               </div>
@@ -118,43 +104,42 @@ function Home() {
         ))}
       </div>
 
-
       <Modal show={showAddModal} onHide={closeAddModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Add New List</Modal.Title>
+          <Modal.Title>{t('home.addNewList')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
             type="text"
             className="form-control"
-            placeholder="Enter list name"
+            placeholder={t('home.enterListName')}
             value={newListName}
             onChange={(e) => setNewListName(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeAddModal}>
-            Close
+            {t('home.close')}
           </Button>
           <Button variant="primary" onClick={createNewList}>
-            Create List
+            {t('home.createList')}
           </Button>
         </Modal.Footer>
       </Modal>
 
       <Modal show={confirmDeleteList !== null} onHide={() => setConfirmDeleteList(null)}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
+          <Modal.Title>{t('home.confirmDelete')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to delete this list?</p>
+          <p>{t('home.confirmDelete')}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setConfirmDeleteList(null)}>
-            Cancel
+            {t('home.cancel')}
           </Button>
           <Button variant="danger" onClick={confirmDelete}>
-            Delete
+            {t('home.delete')}
           </Button>
         </Modal.Footer>
       </Modal>

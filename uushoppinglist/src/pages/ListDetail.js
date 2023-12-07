@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/ListDetail.css';
-import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { shoppingLists } from '../data/data';
 import initialItems from '../data/initialItems';
 import UserService from '../services/userService';
+import { useTranslation } from 'react-i18next';
+import '../styles/ListDetail.css';
+
 
 const ListDetail = () => {
+  const { t } = useTranslation();
   const { listId } = useParams();
   const navigate = useNavigate();
   const selectedList = shoppingLists.find((list) => list.id === parseInt(listId, 10));
@@ -104,19 +106,18 @@ const ListDetail = () => {
 
   return (
     <div className="container">
-      <h1 className="mt-3">
-        {listName}
-      </h1>
+      <h1 className="mt-3">{listName}</h1>
+
       <div className="sec1">
         <div className="row mb-2">
           <div className="col-md-4 col-sm-6">
-            <label>Item: </label>
+            <label>{t('listDetail.selectItem')}:</label>
             <select
               className="form-control select-food"
               value={selectedFood}
               onChange={(e) => setSelectedFood(e.target.value)}
             >
-              <option value="">Select item</option>
+              <option value="">{t('listDetail.selectItem')}</option>
               {initialItems.map((food, index) => (
                 <option key={index} value={food.name}>
                   {food.name}
@@ -125,7 +126,7 @@ const ListDetail = () => {
             </select>
           </div>
           <div className="col-md-2 col-sm-3">
-            <label>Quantity: </label>
+            <label>{t('listDetail.quantity')}:</label>
             <input
               type="number"
               className="form-control input-quantity"
@@ -137,19 +138,21 @@ const ListDetail = () => {
           </div>
           <div className="col-md-2 col-sm-3">
             <button className="btn btn-primary btn-block" onClick={addItem}>
-              Add Item
+              {t('listDetail.addItem')}
             </button>
           </div>
         </div>
       </div>
+
       <div className="mb-2">
-        <label>Filter: </label>
+        <label>{t('listDetail.filter')}:</label>
         <select className="form-controlstate" onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">All</option>
-          <option value="completed">Completed</option>
-          <option value="uncompleted">Uncompleted</option>
+          <option value="all">{t('listDetail.all')}</option>
+          <option value="completed">{t('listDetail.completed')}</option>
+          <option value="uncompleted">{t('listDetail.uncompleted')}</option>
         </select>
       </div>
+
       <ul className="list-group">
         {items.filter(filterItems).map((item) => (
           <li key={item.id} className={`list-group-item ${item.completed ? 'list-group-item-success' : ''}`}>
@@ -161,51 +164,29 @@ const ListDetail = () => {
                 onChange={() => toggleItemCompletion(item.id)}
               />
               <label className="form-check-label">
-                {item.name} - Quantity: {item.quantity}
+                {item.name} - {t('listDetail.quantity')}: {item.quantity}
               </label>
             </div>
             <div className="float-right">
               <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.id)}>
-                Remove
+                {t('listDetail.remove')}
               </button>
             </div>
           </li>
         ))}
       </ul>
+
       {currentUser.id === selectedListOwner && (
         <div className="mt-3">
           <div className="row">
             <div className="col-md-4 col-sm-6">
               <button className="btn btn-primary btn-block" onClick={openModal}>
-                Change List Name
+                {t('listDetail.changeListName')}
               </button>
-              <Modal show={showModal} onHide={closeModal}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Change List Name</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <label>New List Name: </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter new list name"
-                    value={newListName}
-                    onChange={(e) => setNewListName(e.target.value)}
-                  />
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={closeModal}>
-                    Cancel
-                  </Button>
-                  <Button variant="primary" onClick={confirmNameChange}>
-                    Confirm
-                  </Button>
-                </Modal.Footer>
-              </Modal>
             </div>
             <div className="col-md-2 col-sm-3">
               <button className="btn btn-primary mt-2" onClick={() => addMember('New Member')}>
-                Add Member
+                {t('listDetail.addMember')}
               </button>
             </div>
           </div>
@@ -215,7 +196,7 @@ const ListDetail = () => {
                 <li key={member.id} className="list-group-item" id="members-list-item">
                   {member.name}
                   <button className="btn btn-danger btn-sm" onClick={() => removeMember(member.id)}>
-                    Remove Member
+                    {t('listDetail.removeMember')}
                   </button>
                 </li>
               ))}
@@ -223,25 +204,50 @@ const ListDetail = () => {
           </div>
         </div>
       )}
+
       {currentUser.id !== selectedListOwner && (
-        <><label>Users in the list : </label><div
-          className="uslist">
-          <ul className="list-group" id="members-list">
-            {members.map((member) => (
-              <li key={member.id} className="list-group-item" id="members-list-item">
-                {member.name}
-              </li>
-            ))}
-          </ul>
-        </div></>
+        <>
+          <label>{t('listDetail.usersInList')}:</label>
+          <div className="uslist">
+            <ul className="list-group" id="members-list">
+              {members.map((member) => (
+                <li key={member.id} className="list-group-item" id="members-list-item">
+                  {member.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-3">
+            <button className="btn btn-danger" onClick={leaveList}>
+              {t('listDetail.leaveList')}
+            </button>
+          </div>
+        </>
       )}
-      <div className="mt-3">
-        {currentUser.id !== selectedListOwner && (
-          <button className="btn btn-danger" onClick={leaveList}>
-            Leave List
-          </button>
-        )}
-      </div>
+
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{t('listDetail.changeListName')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <label>{t('listDetail.newListName')}:</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder={t('listDetail.enterNewListName')}
+            value={newListName}
+            onChange={(e) => setNewListName(e.target.value)}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            {t('listDetail.cancel')}
+          </Button>
+          <Button variant="primary" onClick={confirmNameChange}>
+            {t('listDetail.confirm')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

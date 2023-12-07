@@ -1,0 +1,42 @@
+{
+    "navbar": {
+      "home": "Domů",
+      "darkMode": "Tmavý režim",
+      "lightMode": "Světlý režim",
+      "currentuser": "Aktuální uživatel:",
+      "english": "EN",
+      "czech": "CS"
+    },
+    "home": {
+      "shoppingLists": "Nákupní seznamy",
+      "showAll": "Zobrazit vše",
+      "showActive": "Zobrazit aktivní",
+      "addList": "Přidat seznam",
+      "viewList": "Zobrazit seznam",
+      "deleteList": "Smazat seznam",
+      "addNewList": "Přidat nový seznam",
+      "enterListName": "Zadejte název seznamu",
+      "close": "Zavřít",
+      "createList": "Vytvořit seznam",
+      "confirmDelete": "Opravdu chcete smazat tento seznam?",
+      "cancel": "Zrušit",
+      "delete": "Smazat"
+    },
+    "listDetail": {
+      "addItem": "Přidat položku",
+      "quantity": "Množství",
+      "remove": "Odstranit",
+      "filter": "Filtr",
+      "all": "Vše",
+      "completed": "Dokončeno",
+      "uncompleted": "Nedokončeno",
+      "changeListName": "Změnit název seznamu",
+      "newListName": "Nový název seznamu",
+      "confirm": "Potvrdit",
+      "addMember": "Přidat člena",
+      "leaveList": "Opustit seznam",
+      "usersInList": "Uživatelé v seznamu",
+      "selectItem": "Vybrat položku"
+    }
+  }
+  

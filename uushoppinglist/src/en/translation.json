@@ -1,0 +1,42 @@
+{
+    "navbar": {
+      "home": "Home",
+      "darkMode": "Dark Mode",
+      "lightMode": "Light Mode",
+      "currentuser": "Current user:",
+      "english": "EN",
+      "czech": "CS"
+    },
+    "home": {
+      "shoppingLists": "Shopping Lists",
+      "showAll": "Show All",
+      "showActive": "Show Active",
+      "addList": "Add List",
+      "viewList": "View List",
+      "deleteList": "Delete List",
+      "addNewList": "Add New List",
+      "enterListName": "Enter list name",
+      "close": "Close",
+      "createList": "Create List",
+      "confirmDelete": "Are you sure you want to delete this list?",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "listDetail": {
+      "addItem": "Add Item",
+      "quantity": "Quantity",
+      "remove": "Remove",
+      "filter": "Filter",
+      "all": "All",
+      "completed": "Completed",
+      "uncompleted": "Uncompleted",
+      "changeListName": "Change List Name",
+      "newListName": "New List Name",
+      "confirm": "Confirm",
+      "addMember": "Add Member",
+      "leaveList": "Leave List",
+      "usersInList": "Users in the list",
+      "selectItem": "Select item"
+    }
+  }
+  
