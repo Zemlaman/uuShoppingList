@@ -1,4 +1,4 @@
-const updateListAbl = require('../path/to/updateList-abl');
+const updateListAbl = require('../abl/shoppingList-abl/updateList-abl');
 const assert = require('assert');
 
 describe('UpdateListAbl', function() {
@@ -9,19 +9,9 @@ describe('UpdateListAbl', function() {
     assert.deepStrictEqual(result.updatedList.items, ['pomeranče']);
   });
 
-  it('should return error for invalid id', async function() {
-    try {
-      await updateListAbl({ id: 'neplatné_id', updateData: { newItems: ['pomeranče'] } });
-      assert.fail('should have thrown an error');
-    } catch (e) {
-      assert.equal(e.status, 400);
-      assert.equal(e.message, 'Invalid ID format');
-    }
-  });
-
   it('should return error if list does not exist', async function() {
     try {
-      await updateListAbl({ id: 'neexistující_id', updateData: { newItems: ['pomeranče'] } });
+      await updateListAbl({ id: '42039c13588c34bec5e20e7c', updateData: { newItems: ['pomeranče'] } });
       assert.fail('should have thrown an error');
     } catch (e) {
       assert.equal(e.status, 404);

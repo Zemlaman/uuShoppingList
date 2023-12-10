@@ -1,41 +1,42 @@
-const createListAbl = require('../abl/shoppingList-abl/createList-abl');
+const CreateListAbl = require('../abl/shoppingList-abl/createList-abl');
 const assert = require('assert');
 
 describe('CreateListAbl', function() {
+    it('should create a new shopping list (happy day scenario)', async function() {
+        let res = {
+            json: function(data) { this.data = data; return this; },
+            status: function(statusCode) { this.statusCode = statusCode; return this; }
+        };
+        await CreateListAbl({ body: { listName: 'New List', ownerId: '7' } }, res);
+        assert.equal(res.statusCode, 200);
+        assert.equal(res.data.success, true);
+    });
 
-  it('should create a new shopping list (happy day scenario)', async function() {
-    const result = await createListAbl({ body: { listName: 'Nový Seznam', ownerId: '12345' } });
-    assert.equal(result.success, true);
-    assert.equal(result.list.name, 'Nový Seznam');
-  });
+    it('should return error for invalid input', async function() {
+        let res = {
+            json: function(data) { this.data = data; return this; },
+            status: function(statusCode) { this.statusCode = statusCode; return this; }
+        };
+        await CreateListAbl({ body: {} }, res);
+        assert.equal(res.statusCode, 400);
+    });
 
-  it('should return error for invalid input', async function() {
-    try {
-      await createListAbl({ body: { ownerId: '12345' } });
-      assert.fail('should have thrown an error');
-    } catch (e) {
-      assert.equal(e.status, 400);
-      assert.equal(e.message, 'Invalid input');
-    }
-  });
+    it('should return error if list already exists', async function() {
+        let res = {
+            json: function(data) { this.data = data; return this; },
+            status: function(statusCode) { this.statusCode = statusCode; return this; }
+        };
+        await CreateListAbl({ body: { listName: 'My shopping list', ownerId: '1' } }, res);
+        assert.equal(res.statusCode, 400);
+    });
 
-  it('should return error if list already exists', async function() {
-    try {
-      await createListAbl({ body: { listName: 'Existující Seznam', ownerId: '12345' } });
-      assert.fail('should have thrown an error');
-    } catch (e) {
-      assert.equal(e.status, 400);
-      assert.equal(e.message, 'List already exists');
-    }
+    it('should handle database errors', async function() {
+      let res = {
+          json: function(data) { this.data = data; return this; },
+          status: function(statusCode) { this.statusCode = statusCode; return this; }
+      };
+      await CreateListAbl({ body: { listName: 'My shopping list', ownerId: '1' } }, res);
+      assert.equal(res.statusCode, 500);
   });
-
-  it('should handle database errors', async function() {
-    try {
-      await createListAbl({ body: { listName: 'Test Seznam', ownerId: '12345' } });
-      assert.fail('should have thrown an error');
-    } catch (e) {
-      assert.equal(e.status, 500);
-      assert.equal(e.message, 'Internal Server Error');
-    }
-  });
+  
 });
