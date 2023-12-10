@@ -1,4 +1,4 @@
-const getListAbl = require('../path/to/getList-abl');
+const getListAbl = require('../abl/shoppingList-abl/getList-abl');
 const assert = require('assert');
 
 describe('GetListAbl', function() {
