@@ -6,7 +6,7 @@ var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const port = 8001;
+const port = 8000;
 
 app.use("/shoppingList", shoppingListController);
 
