@@ -1,12 +1,12 @@
 const ShoppingListDao = require("../../dao/shoppingLists-dao");
 
-async function CreateListAbl(req, res) {
-  let SLDao = new ShoppingListDao();
-  let requestData = req.body;
-
-  if (!requestData.listName) {
-    return res.status(400).json({ error: "Invalid input" });
-  }
+  async function CreateListAbl(req) {
+    let SLDao = new ShoppingListDao();
+    let requestData = req.body;
+  
+    if (!requestData.listName) {
+      return { status: 400, data: { error: "Invalid input" }};
+    }
 
   let newList = {
     name: requestData.listName,
@@ -21,13 +21,13 @@ async function CreateListAbl(req, res) {
     const alreadyExists = allLists.some(list => list.name === newList.name);
 
     if (alreadyExists) {
-      return res.status(400).json({ error: "List already exists." });
+      return { status: 400, data: { error: "List already exists." }};
     }
 
     const createdList = await SLDao.createNewList(newList);
-    res.json({ success: true, message: "Shopping list created!", list: createdList });
+    return { status: 200, data: { success: true, message: "Shopping list created!", list: createdList }};
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return { status: 500, data: { error: error.message }};
   }
 }
 
